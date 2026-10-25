@@ -5,32 +5,42 @@
 --	||	Yuri Yves 			||	--
 
 ----------------------------------
+--	::	Constants			::	--
+----------------------------------
+
+const NOISE_SEED: number	= 0x98a2ff1b
+
+----------------------------------
 --	::	Buffers				::	--
 ----------------------------------
 
 const PERMBUFFER: buffer	= buffer.create(0x200)
 
 ----------------------------------
+--	::	Private				::	--
+----------------------------------
+
+const RNG: Random			= Random.new(NOISE_SEED)
+
+for i = 0, 0xFF do
+	const J: number			= RNG:NextInteger(0, i)
+	const V: number			= buffer.readu8(PERMBUFFER, J)
+	buffer.writeu8(PERMBUFFER, i, V)
+	buffer.writeu8(PERMBUFFER, J, i)
+end
+
+buffer.copy(PERMBUFFER, 0x100, PERMBUFFER, 0, 0x100)
+
+----------------------------------
 --	::	Return				::	--
 ----------------------------------
 
-return function(x: number, y: number, z: number): number
-	const RNG: Random		= Random.new(z)
-	
-	for i = 0, 0xFF do
-		const J: number		= RNG:NextInteger(0, i)
-		const V: number		= buffer.readu8(PERMBUFFER, J)
-		buffer.writeu8(PERMBUFFER, i, V)
-		buffer.writeu8(PERMBUFFER, J, i)
-	end
-	
-	buffer.copy(PERMBUFFER, 0x100, PERMBUFFER, 0, 0x100)
-	
-	const SUMFACTOR		= (x + y + z) * (1 / 3)
+return function(x: number, y: number, z: number): number	
+	const SUMFACTOR		= (x + y + z) / 3
 	
 	const i, j, k		= (x + SUMFACTOR) // 1, (y + SUMFACTOR) // 1, (z + SUMFACTOR) // 1
 	
-	const RETFACTOR		= (i + j + k) * (1 / 6)
+	const RETFACTOR		= (i + j + k) / 6
 	
 	const x0, y0, z0	= x - (i - RETFACTOR), y - (j - RETFACTOR), z - (k - RETFACTOR)
 	
