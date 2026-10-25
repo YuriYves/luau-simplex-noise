@@ -11,27 +11,21 @@
 const PERMBUFFER: buffer	= buffer.create(0x200)
 
 ----------------------------------
---	::	Private				::	--
+--	::	Return				::	--
 ----------------------------------
 
-const function CONSTRUCT(SEED: number): ()
-	const RNG: Random		= Random.new(SEED)
+return function(x: number, y: number, z: number): number
+	const RNG: Random		= Random.new(z)
+	
 	for i = 0, 0xFF do
 		const J: number		= RNG:NextInteger(0, i)
 		const V: number		= buffer.readu8(PERMBUFFER, J)
 		buffer.writeu8(PERMBUFFER, i, V)
 		buffer.writeu8(PERMBUFFER, J, i)
 	end
+	
 	buffer.copy(PERMBUFFER, 0x100, PERMBUFFER, 0, 0x100)
-end
-
-CONSTRUCT(0x98a2ff1b)
-
-----------------------------------
---	::	Return				::	--
-----------------------------------
-
-return function(x: number, y: number, z: number): number	
+	
 	const SUMFACTOR		= (x + y + z) * (1 / 3)
 	
 	const i, j, k		= (x + SUMFACTOR) // 1, (y + SUMFACTOR) // 1, (z + SUMFACTOR) // 1
