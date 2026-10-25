@@ -82,26 +82,26 @@ return function(x: number, y: number, z: number): number
 	if T0 >= 0 then
 		const Hash		= buffer.readu8(PERMBUFFER, GI + buffer.readu8(PERMBUFFER, GJ + buffer.readu8(PERMBUFFER, GK))) % 16
 		const U, V		= if Hash < 8 then x0 else y0, if Hash < 4 then y0 else z0
-		N0				= (T0 * T0) ^ 2 * ( (if Hash % 2 == 0 then U else -U) + (if Hash % 4 < 2 then V else -V) )
+		N0				= (T0 ^ 2) ^ 2 * ( (if Hash % 2 == 0 then U else -U) + (if Hash % 4 < 2 then V else -V) )
 	end
 	
 	if T1 >= 0 then
 		const Hash		= buffer.readu8(PERMBUFFER, GI + i1 + buffer.readu8(PERMBUFFER, GJ + j1 + buffer.readu8(PERMBUFFER, GK + k1))) % 16
 		const U, V		= if Hash < 8 then x1 else y1, if Hash < 4 then y1 else z1
-		N1				= (T1 * T1) ^ 2 * ( (if Hash % 2 == 0 then U else -U) + (if Hash % 4 < 2 then V else -V) )
+		N1				= (T1 ^ 2) ^ 2 * ( (if Hash % 2 == 0 then U else -U) + (if Hash % 4 < 2 then V else -V) )
 	end
 	
 	if T2 >= 0 then
 		const Hash		= buffer.readu8(PERMBUFFER, GI + i2 + buffer.readu8(PERMBUFFER, GJ + j2 + buffer.readu8(PERMBUFFER, GK + k2))) % 16
 		const U, V		= if Hash < 8 then x2 else y2, if Hash < 4 then y2 else z2
-		N2				= (T2 * T2) ^ 2 * ( (if Hash % 2 == 0 then U else -U) + (if Hash % 4 < 2 then V else -V) )
+		N2				= (T2 ^ 2) ^ 2 * ( (if Hash % 2 == 0 then U else -U) + (if Hash % 4 < 2 then V else -V) )
 	end
 	
 	if T3 >= 0 then
 		const Hash		= buffer.readu8(PERMBUFFER, GI + 1 + buffer.readu8(PERMBUFFER, GJ + 1 + buffer.readu8(PERMBUFFER, GK + 1))) % 16
 		const U, V		= if Hash < 8 then x3 else y3, if Hash < 4 then y3 else z3
-		N3				= (T3 * T3) ^ 2 * ( (if Hash % 2 == 0 then U else -U) + (if Hash % 4 < 2 then V else -V) )
+		N3				= (T3 ^ 2) ^ 2 * ( (if Hash % 2 == 0 then U else -U) + (if Hash % 4 < 2 then V else -V) )
 	end
-		
+	
 	return 0x20 * (N0 + N1 + N2 + N3)
 end
