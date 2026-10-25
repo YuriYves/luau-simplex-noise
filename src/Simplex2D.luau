@@ -8,6 +8,8 @@
 --	::	Constants			::	--
 ----------------------------------
 
+const NOISE_SEED: number	= 0x98a2ff1b
+
 const SQRT3: number			= math.sqrt(3)
 const F2: number			= 0.5 * (SQRT3 - 1)
 const G2: number			= (3 - SQRT3) / 6
@@ -23,18 +25,16 @@ const PERMBUFFER: buffer	= buffer.create(0x200)
 --	::	Private				::	--
 ----------------------------------
 
-const function CONSTRUCT(SEED: number): ()
-	const RNG: Random		= Random.new(SEED)
-	for i = 0, 0xFF do
-		const J: number		= RNG:NextInteger(0, i)
-		const V: number		= buffer.readu8(PERMBUFFER, J)
-		buffer.writeu8(PERMBUFFER, i, V)
-		buffer.writeu8(PERMBUFFER, J, i)
-	end
-	buffer.copy(PERMBUFFER, 0x100, PERMBUFFER, 0, 0x100)
+const RNG: Random			= Random.new(NOISE_SEED)
+
+for i = 0, 0xFF do
+	const J: number			= RNG:NextInteger(0, i)
+	const V: number			= buffer.readu8(PERMBUFFER, J)
+	buffer.writeu8(PERMBUFFER, i, V)
+	buffer.writeu8(PERMBUFFER, J, i)
 end
 
-CONSTRUCT(0x98a2ff1b)
+buffer.copy(PERMBUFFER, 0x100, PERMBUFFER, 0, 0x100)
 
 ----------------------------------
 --	::	Return				::	--
@@ -54,7 +54,7 @@ return function(x: number, y: number): number
 	if x0 > y0 then i1	= 1 else j1	= 1 end
 	
 	const x1, y1		= x0 - i1 + G2, y0 - j1 + G2
-	const x2, y2		= x0 - 1 + G2, y0 - 1 + G2
+	const x2, y2		= x0 - 1 + G2X2, y0 - 1 + G2X2
 	
 	const GI, GJ		= i % 0x100, j % 0x100
 	
@@ -82,7 +82,7 @@ return function(x: number, y: number): number
 			const H4	= Hash - 4
 			D			= if H4 < 2 then (if H4 == 0 then x1 else -x1) else (if H4 == 2 then y1 else -y1)
 		end
-		N1				= (T1 * T1) ^ 2 * D
+		N1				= (T0 * T0) ^ 2 * D
 	end
 	
 	if T2 >= 0 then
@@ -94,7 +94,7 @@ return function(x: number, y: number): number
 			const H4	= Hash - 4
 			D			= if H4 < 2 then (if H4 == 0 then x2 else -x2) else (if H4 == 2 then y2 else -y2)
 		end
-		N2				= (T2 * T2) ^ 2 * D
+		N2				= (T0 * T0) ^ 2 * D
 	end
 	
 	return 0x46 * (N0 + N1 + N2)
