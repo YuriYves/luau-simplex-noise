@@ -70,7 +70,7 @@ return function(x: number, y: number): number
 			const H4	= Hash - 4
 			D			= if H4 < 2 then (if H4 == 0 then x0 else -x0) else (if H4 == 2 then y0 else -y0)
 		end
-		N0				= (T0 * T0) ^ 2 * D
+		N0				= (T0 ^ 2) ^ 2 * D
 	end
 	
 	if T1 >= 0 then
@@ -82,7 +82,7 @@ return function(x: number, y: number): number
 			const H4	= Hash - 4
 			D			= if H4 < 2 then (if H4 == 0 then x1 else -x1) else (if H4 == 2 then y1 else -y1)
 		end
-		N1				= (T0 * T0) ^ 2 * D
+		N1				= (T1 ^ 2) ^ 2 * D
 	end
 	
 	if T2 >= 0 then
@@ -94,7 +94,7 @@ return function(x: number, y: number): number
 			const H4	= Hash - 4
 			D			= if H4 < 2 then (if H4 == 0 then x2 else -x2) else (if H4 == 2 then y2 else -y2)
 		end
-		N2				= (T0 * T0) ^ 2 * D
+		N2				= (T2 ^ 2) ^ 2 * D
 	end
 	
 	return 0x46 * (N0 + N1 + N2)
