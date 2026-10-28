@@ -49,9 +49,9 @@ return function(x: number, y: number): number
 	
 	const x0, y0		= x - (i - RETFACTOR), y - (j - RETFACTOR)
 	
-	local i1, j1		= 0x0, 0x0
+	local i1, j1		= 0x0, 0x1
 	
-	if x0 > y0 then i1	= 1 else j1	= 1 end
+	if x0 > y0 then i1, j1	= 1, 0 end
 	
 	const x1, y1		= x0 - i1 + G2, y0 - j1 + G2
 	const x2, y2		= x0 - 1 + G2X2, y0 - 1 + G2X2
